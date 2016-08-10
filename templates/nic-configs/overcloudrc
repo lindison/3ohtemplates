@@ -1,9 +1,0 @@
-export OS_NO_CACHE=True
-export COMPUTE_API_VERSION=1.1
-export OS_USERNAME=admin
-export no_proxy=,10.0.0.14
-export OS_TENANT_NAME=admin
-export OS_CLOUDNAME=overcloud
-export OS_AUTH_URL=http://10.0.0.14:5000/v2.0
-export NOVA_VERSION=1.1
-export OS_PASSWORD=dv7tqZrTqeED9hv7YTWnHT4U4
