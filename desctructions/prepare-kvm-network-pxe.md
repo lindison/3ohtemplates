@@ -157,5 +157,5 @@ EOF`
 `exit`  
 
 ### Create kvm-baremetal flavor
-openstack flavor create --id auto --ram 8192 --disk 58 --vcpus 1 kvm-baremetal
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" kvm-baremetal
+`openstack flavor create --id auto --ram 8192 --disk 58 --vcpus 1 kvm-baremetal`
+`openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" kvm-baremetal`
