@@ -1,6 +1,6 @@
 # Using a KVM host as the lab server.
 
-Much credit to Keith Tenzer and his great tutorial ("Red Hat OpenStack Platform 8 Lab Configuration using OpenStack Director") on getting a KVM nested OpenStack using OSP8 and TripleO.
+Credit to Keith Tenzer for the work he's done on running OpenStack Director in KVM with a KVM hosted OverCloud. 
 
 ## My lab config
 

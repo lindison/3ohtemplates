@@ -4,53 +4,79 @@
 `hostnamectl set-hostname undercloud.local.com`
 `hostnamectl set-hostname --transient undercloud.local.com`
 
-#Update transient name to /etc/hosts file
+## Update transient name to /etc/hosts file
+
+Update the hostname to reflect the name used in the above section.  
+
 `vi /etc/hosts`  (example: 127.0.0.1 undercloud.local.com)
 
+## Register the RHEL-7 box to Red Hat.
+
+Register the box to subscription manager. This requires the account name and password that is used with the Red Hat subscription.  
 `subscription-manager register`  
 
+The following will list the available subscriptions to the account used above. This command will output a ton of stuff, look for the subscription called "Red Hat OpenStack."  
+`subscription-manager list --available`
+
+For the purposes of the "demo" the following pool is used. Update this according to your entilement.  
 `subscription-manager subscribe --pool=8a85f98155e9947d0155ea71bc2b1389`  
 
-`subscription-manager repos --disable=*`  
+Disable all the yum repos; in the next step we'll re-enable only the ones needed.  
+`subscription-manager repos --disable=*`   
 
-`subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-openstack-8-rpms --enable=rhel-7-server-openstack-8-director-rpms --enable rhel-7-server-rh-common-rpms`
+Enable only the repos required for install the undercloud and other RHEL tools.
+`subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-openstack-8-rpms --enable=rhel-7-server-openstack-8-director-rpms --enable rhel-7-server-rh-common-rpms`  
 
-`sudo yum install -y elinks`
+### Update the system.  
 
-`sudo yum update -y`
+Update system and install packages.  
+`sudo yum install -y elinks`  
 
-`sudo reboot`
+`sudo yum update -y`  
 
-`useradd stack`
+`sudo reboot`  
 
-`echo "stack:redhat" | chpasswd`
+## Create the stack user account.
 
-`echo "stack ALL=(root) NOPASSWD:ALL" | tee -a /etc/sudoers.d/stack`
+This is an account used by the UnderCloud to provision the overcloud.  
+`useradd stack`  
 
-`chmod 0440 /etc/sudoers.d/stack`
+`echo "stack:redhat" | chpasswd`  
+
+`echo "stack ALL=(root) NOPASSWD:ALL" | tee -a /etc/sudoers.d/stack`  
+
+`chmod 0440 /etc/sudoers.d/stack`  
 
 ### Login as stack user
 `su - stack`
 
 `cd ~`
 
-`mkdir images`
+### Create Directories for holding templates and images.   
 
-`mkdir templates`
+`mkdir images`  
 
-`sudo yum install -y python-tripleoclient`
+`mkdir templates`  
+
+### Install the tripleO client.
+
+`sudo yum install -y python-tripleoclient`  
 
 ### Need to determine if this needs to be done to resolve the horizon issue.
+
+If Horizon is unable to deploy properly when running the overcloud deployment, this downgrade may resolve the issue. By default, use the installed package and only down grade as a teouble shooting step.  
+(source: https://bugzilla.redhat.com/show_bug.cgi?id=1347063)  
 `sudo yum downgrade python-tripleoclient-0.3.4-4.el7ost.noarch`
 
 ### Need to check this fix if needed with physicals
 When the undercloud reboots; it may go into a emergancy boot state. This is the fix.
 
-`https://access.redhat.com/solutions/1437183`
+`https://access.redhat.com/solutions/1437183`  
 
 ### Put customer specific config in here {{ undercloud.conf }}
+This is the undercloud configurations. The tripeO undercloud will be installed using these settings.  
 
-`vi undercloud.conf`
+`vi undercloud.conf`  
 
 ### Install the undercloud
 
@@ -60,44 +86,44 @@ When the undercloud reboots; it may go into a emergancy boot state. This is the 
 
 This can be added to a typical bashrc file, if desired. Source the file to get the OpenStack credentials.
 
-`source ~/stackrc`
+`source ~/stackrc`   
 
-This should show services running
+This should show services running   
 
-`openstack-status`
+`openstack-status`   
 
-This should show ...
+This should show ...  
 
-`openstack catalog show nova`
+`openstack catalog show nova`   
 
 ## END UnderCloud Installed
 ---
 
 ### Prepare undercloud for deploying overcloud
 
-`sudo yum -y install rhosp-director-images rhosp-director-images-ipa`
+`sudo yum -y install rhosp-director-images rhosp-director-images-ipa`   
 
-`cp /usr/share/rhosp-director-images/overcloud-full-latest-8.0.tar ~/images/.`
+`cp /usr/share/rhosp-director-images/overcloud-full-latest-8.0.tar ~/images/.`   
 
-`cp /usr/share/rhosp-director-images/ironic-python-agent-latest-8.0.tar ~/images/.`
+`cp /usr/share/rhosp-director-images/ironic-python-agent-latest-8.0.tar ~/images/.`   
 
-`cd ~/images`
+`cd ~/images`   
 
-`for tarfile in *.tar; do tar -xf $tarfile; done`
+`for tarfile in *.tar; do tar -xf $tarfile; done`   
 
-`openstack overcloud image upload --image-path /home/stack/images`
+`openstack overcloud image upload --image-path /home/stack/images`   
 
 ### Validate images are uploaded
 
-`openstack image list`
+`openstack image list`   
 
 ### Check neutron dns
 
-neutron subnet-list
+`neutron subnet-list`   
 
 ### Need id
 
-`neutron subnet-update {{ subnet_id }} --dns-nameserver 10.0.0.2`
+`neutron subnet-update {{ subnet_id }} --dns-nameserver 10.0.0.2`   
 
 ### Create the json (refer to create_json_kvm doc)
 ### instructions are in instack_json_kvm.txt
