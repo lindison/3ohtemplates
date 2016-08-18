@@ -160,6 +160,8 @@ This should show ...
 `openstack overcloud profiles list`
 
 ### Configure yml files:
+Will add more customer specific YAML files to the SCM.  
+
 `vi templates/network-environment.yaml`  
 `vi templates/nic-configs/controller.yaml`  
 
