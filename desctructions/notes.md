@@ -29,26 +29,26 @@ Overcloud Deployed
 
 ### Flavors:
 
-Create flavors with the following commands:  
+Create flavors with the following commands, --id can be declarative (preferred) or automatic:  
 
 Kilo-1-20, 1vCPU, 20GB RAM  
 `openstack flavor create --public kilo-1-20 --id auto --ram 20480 --disk 40 --vcpus 1`  
 Kilo-1-40, 1vCPU, 40GB RAM  
-`openstack flavor create --public kilo-1-40 --id auto --ram 40960 --disk 40 --vcpus 1`  
+`openstack flavor create --public kilo-1-40 --id 2 --ram 40960 --disk 40 --vcpus 1`  
 Kilo-2-40, 2vCPU, 40GB RAM  
-`openstack flavor create --public kilo-2-40 --id auto --ram 40960 --disk 40 --vcpus 2`  
+`openstack flavor create --public kilo-2-40 --id 3 --ram 40960 --disk 40 --vcpus 2`  
 Kilo-2-80, 2vCPU, 80GB RAM  
-`openstack flavor create --public kilo-2-80 --id auto --ram 81920 --disk 40 --vcpus 2`   
+`openstack flavor create --public kilo-2-80 --id 4 --ram 81920 --disk 40 --vcpus 2`   
 Mega-2-16, 2vCPU, 16GB RAM  
-`openstack flavor create --public mega-2-16 --id auto --ram 16384 --disk 40 --vcpus 2`  
+`openstack flavor create --public mega-2-16 --id 5 --ram 16384 --disk 40 --vcpus 2`  
 Mega-4-16, 4vCPU, 16GB RAM  
-`openstack flavor create --public mega-4-16 --id auto --ram 16384 --disk 40 --vcpus 4`  
+`openstack flavor create --public mega-4-16 --id 6 --ram 16384 --disk 40 --vcpus 4`  
 Mega-4-32, 4vCPU, 32GB RAM  
-`openstack flavor create --public mega-4-32 --id auto --ram 32768 --disk 40 --vcpus 4`  
+`openstack flavor create --public mega-4-32 --id 7 --ram 32768 --disk 40 --vcpus 4`  
 Mega-8-32, 8vCPU, 32GB RAM  
-`openstack flavor create --public mega-8-32 --id auto --ram 32768 --disk 40 --vcpus 8`  
+`openstack flavor create --public mega-8-32 --id 8 --ram 32768 --disk 40 --vcpus 8`  
 Mega-8-64, 8vCPU, 64GB RAM  
-`openstack flavor create --public mega-8-64 --id auto --ram 65536 --disk 40 --vcpus 8`  
+`openstack flavor create --public mega-8-64 --id 9 --ram 65536 --disk 40 --vcpus 8`  
 
 ## OS (assume 64bit on all):
 
@@ -70,6 +70,9 @@ Oracle Enterprise Linux (x86_64)
 This may need to be done using Packer (out of scope for POC?)
 
 Examples:  
-'source overcloudrc'
-'curl -O https://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/23/Cloud/x86_64/Images/Fedora-Cloud-Base-23-20151030.x86_64.qcow2'
-'glance --os-image-api-version 2 image-create --name 'Fedora-23-x86_64' --disk-format qcow2 --container-format bare --file Fedora-Cloud-Base-23-20151030.x86_64.qcow2'
+'source overcloudrc'  
+'curl -O https://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/23/Cloud/x86_64/Images/Fedora-Cloud-Base-23-20151030.x86_64.qcow2'  
+
+### To make visability outside project, the image must be created by the admin.
+
+'glance --os-image-api-version 2 image-create --name 'Fedora-23-x86_64' --disk-format qcow2 --container-format bare --visibility public --file Fedora-Cloud-Base-23-20151030.x86_64.qcow2'  

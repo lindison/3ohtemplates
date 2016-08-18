@@ -62,14 +62,14 @@ This is an account used by the UnderCloud to provision the overcloud.
 
 `sudo yum install -y python-tripleoclient`  
 
-### Need to determine if this needs to be done to resolve the horizon issue.
+### Need to determine if this needs to be done to resolve the Horizon issue.
 
-If Horizon is unable to deploy properly when running the overcloud deployment, this downgrade may resolve the issue. By default, use the installed package and only down grade as a teouble shooting step.  
+If Horizon is unable to deploy properly when running the overcloud deployment, this downgrade may resolve the issue. By default, use the installed package and only down grade as a trouble shooting step.  
 (source: https://bugzilla.redhat.com/show_bug.cgi?id=1347063)  
 `sudo yum downgrade python-tripleoclient-0.3.4-4.el7ost.noarch`
 
 ### Need to check this fix if needed with physicals
-When the undercloud reboots; it may go into a emergancy boot state. This is the fix.
+When the undercloud reboots; it may go into a emergency boot state. This is the fix.
 
 `https://access.redhat.com/solutions/1437183`  
 
@@ -101,11 +101,11 @@ This should show ...
 
 ### Prepare undercloud for deploying overcloud
 
-`sudo yum -y install rhosp-director-images rhosp-director-images-ipa`   
+`sudo yum -y install rhosp-director-images rhosp-director-images-ipa`  
 
-`cp /usr/share/rhosp-director-images/overcloud-full-latest-8.0.tar ~/images/.`   
+`cp /usr/share/rhosp-director-images/overcloud-full-latest-8.0.tar ~/images/.`  
 
-`cp /usr/share/rhosp-director-images/ironic-python-agent-latest-8.0.tar ~/images/.`   
+`cp /usr/share/rhosp-director-images/ironic-python-agent-latest-8.0.tar ~/images/.`  
 
 `cd ~/images`   
 
@@ -121,7 +121,7 @@ This should show ...
 
 `neutron subnet-list`   
 
-### Need id
+### Need id and customer specific DNS server
 
 `neutron subnet-update {{ subnet_id }} --dns-nameserver 10.0.0.2`   
 
@@ -129,27 +129,27 @@ This should show ...
 ### instructions are in instack_json_kvm.txt
 
 ### Validate the json
-`curl -O https://raw.githubusercontent.com/rthallisey/clapper/master/instackenv-validator.py`
+`curl -O https://raw.githubusercontent.com/rthallisey/clapper/master/instackenv-validator.py`  
 
-`python instackenv-validator.py -f instackenv.json`
+`python instackenv-validator.py -f instackenv.json`  
 
 ### Add nodes to Ironic
 
-`openstack baremetal import --json instackenv.json`
+`openstack baremetal import --json instackenv.json`  
 
 ### Show nodes registered
 
-`ironic node-list`
+`ironic node-list`  
 
 ### Create flavors (as needed)
 
-`openstack flavor create --id auto --ram 8192 --disk 58 --vcpus 1 kvm-baremetal`
+`openstack flavor create --id auto --ram 8192 --disk 58 --vcpus 1 kvm-baremetal`  
 
-`openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" kvm-baremetal`
+`openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" kvm-baremetal`  
 
-`openstack baremetal configure boot`
+`openstack baremetal configure boot`  
 
-`openstack baremetal introspection bulk start`
+`openstack baremetal introspection bulk start`  
 
 ### Tag nodes
 
@@ -160,9 +160,9 @@ This should show ...
 `openstack overcloud profiles list`
 
 ### Configure yml files:
-- `vi templates/network-environment.yaml`
-- `vi templates/nic-configs/controller.yaml`
+`vi templates/network-environment.yaml`  
+`vi templates/nic-configs/controller.yaml`  
 
-`openstack overcloud deploy --templates --control-scale 1 --compute-scale 1 --neutron-tunnel-types vxlan --neutron-network-type vxlan`
+`openstack overcloud deploy --templates --control-scale 1 --compute-scale 1 --neutron-tunnel-types vxlan --neutron-network-type vxlan`  
 
-`openstack overcloud deploy --templates -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml -e ~/templates/network-environment.yaml -e ~/templates/firstboot-environment.yaml --control-scale 1 --compute-scale 1 --control-flavor control --compute-flavor compute --ntp-server pool.ntp.org --neutron-network-type vxlan --neutron-tunnel-types vxlan`
+`openstack overcloud deploy --templates -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml -e ~/templates/network-environment.yaml -e ~/templates/firstboot-environment.yaml --control-scale 1 --compute-scale 1 --control-flavor control --compute-flavor compute --ntp-server pool.ntp.org --neutron-network-type vxlan --neutron-tunnel-types vxlan`  
