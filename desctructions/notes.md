@@ -22,57 +22,11 @@ The following will test scaling on the environment. Does it make sense to build 
 [stack@undercloud ~]$ `openstack overcloud deploy --templates --control-scale 1 --compute-scale 2 --ntp-server pool.ntp.org --neutron-network-type vxlan --neutron-tunnel-types vxlan`  
 
 
+Let's see what this does...
+`openstack overcloud deploy --templates -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml -e ~/templates/network-environment.yaml --control-scale 1 --compute-scale 4 --ntp-server pool.ntp.org --neutron-network-type vxlan --neutron-tunnel-types vxlan --neutron-bridge-mappings datacentre:br-ex,floating:br-floating`
+
+
 ### Scale done
 Stack overcloud UPDATE_COMPLETE  
 Overcloud Endpoint: http://10.0.0.6:5000/v2.0  
 Overcloud Deployed  
-
-### Flavors:
-
-Create flavors with the following commands, --id can be declarative (preferred) or automatic:  
-
-Kilo-1-20, 1vCPU, 20GB RAM  
-`openstack flavor create --public kilo-1-20 --id auto --ram 20480 --disk 40 --vcpus 1`  
-Kilo-1-40, 1vCPU, 40GB RAM  
-`openstack flavor create --public kilo-1-40 --id 2 --ram 40960 --disk 40 --vcpus 1`  
-Kilo-2-40, 2vCPU, 40GB RAM  
-`openstack flavor create --public kilo-2-40 --id 3 --ram 40960 --disk 40 --vcpus 2`  
-Kilo-2-80, 2vCPU, 80GB RAM  
-`openstack flavor create --public kilo-2-80 --id 4 --ram 81920 --disk 40 --vcpus 2`   
-Mega-2-16, 2vCPU, 16GB RAM  
-`openstack flavor create --public mega-2-16 --id 5 --ram 16384 --disk 40 --vcpus 2`  
-Mega-4-16, 4vCPU, 16GB RAM  
-`openstack flavor create --public mega-4-16 --id 6 --ram 16384 --disk 40 --vcpus 4`  
-Mega-4-32, 4vCPU, 32GB RAM  
-`openstack flavor create --public mega-4-32 --id 7 --ram 32768 --disk 40 --vcpus 4`  
-Mega-8-32, 8vCPU, 32GB RAM  
-`openstack flavor create --public mega-8-32 --id 8 --ram 32768 --disk 40 --vcpus 8`  
-Mega-8-64, 8vCPU, 64GB RAM  
-`openstack flavor create --public mega-8-64 --id 9 --ram 65536 --disk 40 --vcpus 8`  
-
-## OS (assume 64bit on all):
-
-### Building Images
-http://docs.openstack.org/image-guide/centos-image.html
-http://docs.openstack.org/image-guide/ubuntu-image.html
-https://www.rdoproject.org/resources/image-resources/
-
-### Finding and installing cloud ready images
-
- http://docs.openstack.org/image-guide/obtain-images.html link for images
-[Red Hat Enterprise Linux 6 (x86_64)](https://rhn.redhat.com/rhn/software/channel/downloads/Download.do?cid=16952)  
-[Red Hat Enterprise Linux 7 (x86_64)](https://access.redhat.com/downloads/content/69/ver=/rhel---7/x86_64/product-downloads)  
-[Ubuntu 14.04](http://cloud-images.ubuntu.com/trusty/)  
-[CentOS 6 (x86_64)](http://cloud.centos.org/centos/6/images/)  
-[CentOS 7 (x86_64)](http://cloud.centos.org/centos/7/images/)  
-[Windows Server 2012 R2(x86_64)](https://cloudbase.it/windows-cloud-images/)  
-Oracle Enterprise Linux (x86_64)
-This may need to be done using Packer (out of scope for POC?)
-
-Examples:  
-'source overcloudrc'  
-'curl -O https://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/fedora/linux/releases/23/Cloud/x86_64/Images/Fedora-Cloud-Base-23-20151030.x86_64.qcow2'  
-
-### To make visability outside project, the image must be created by the admin.
-
-'glance --os-image-api-version 2 image-create --name 'Fedora-23-x86_64' --disk-format qcow2 --container-format bare --visibility public --file Fedora-Cloud-Base-23-20151030.x86_64.qcow2'  

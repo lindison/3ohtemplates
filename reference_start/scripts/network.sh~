@@ -1,0 +1,5 @@
+#! /bin/bash
+
+# this creates the floating network and router
+. ~stack/overcloudrc
+

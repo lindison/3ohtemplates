@@ -1,0 +1,19 @@
+#! /bin/bash
+
+. ~stack/overcloudrc
+
+openstack project create tenant2
+openstack user create tenant2 --password password2
+
+openstack role create user
+
+openstack user role add --project tenant2 --user tenant2 user
+
+source <( openstack user show tenant2 -f shell) 
+
+
+neutron net-create --provider:network_type=vlan --provider:physical_network=datacentre --provider:segmentation_id=3105 --tenant_id=$id tenant2net1
+
+neutron subnet-create --name=tenant2subnet1 --dns-nameserver=8.8.8.8 --tenant_id=$id tenant2net1 172.16.40.0/24
+
+neutron router-interface-add router1 tenant2net1
