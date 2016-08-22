@@ -4,4 +4,4 @@
   remote_user: heat-admin
   tasks:
   - name: copy the overcloudrc file to all nodes
-  - copy: src=/home/stack/overcloudrc dest=/home/heat-admin/overcloudrc owner=heat-admin group=heat-admin mode=0644
+    copy: src=/home/stack/overcloudrc dest=/home/heat-admin/overcloudrc owner=heat-admin group=heat-admin mode=0644
