@@ -49,12 +49,15 @@ neutron router-gateway-set <router_id> <external_network_id>
 `ssh-keygen -q -N ""`  
 `nova keypair-add --pub-key ~/.ssh/id_rsa.pub demo-key`  
 
-`for i in {1..3}; do nova boot --flavor kilo-1-tiny --nic net-id=73b70c5e-e20e-495f-83b9-7080d5d45f27 --nic net-id=1a421c53-907c-4e68-a470-f396a7109a6b --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key web$i; done`  
+`for i in {1..2}; do nova boot --flavor kilo-1-tiny --nic net-id=695ad094-a6c5-4134-99fa-acbea463ab71 --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key web$i; done`  
 
-`for i in {1..3}; do nova boot --flavor kilo-1-tiny --nic net-id=1a421c53-907c-4e68-a470-f396a7109a6b --nic net-id=17072572-5888-432d-ab99-442d808e35d7 --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key app$i; done`
+`for i in {1..3}; do nova boot --flavor kilo-1-tiny --nic net-id=d8796edd-2422-439a-8c05-f23d4f82ff3a --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key app$i; done`
 
-`for i in {1..3}; do nova boot --flavor kilo-1-tiny --nic net-id=17072572-5888-432d-ab99-442d808e35d7 --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key db$i; done`
+`for i in {1..2}; do nova boot --flavor kilo-1-tiny --nic net-id=4eb7febc-419d-413b-ac6f-0b7309f40236 --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key db$i; done`
 
+`for i in {1..2}; do nova boot --flavor kilo-1-tiny --nic net-id=72a35dc6-daf1-4d35-9254-54c8bb638abd --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key dev$i; done`
+
+ `for i in {1..1}; do nova boot --flavor kilo-1-tiny --nic net-id=e04e6a96-4c04-46ac-94a1-01fbb149274f --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key backup$i; done`
 
 ### Flavors:
 
