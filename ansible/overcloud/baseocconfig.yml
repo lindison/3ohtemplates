@@ -1,0 +1,7 @@
+--- # This playbook will copy the overcloudrc file to the overcloud nodes.
+- hosts: all
+  connection: ssh
+  remote_user: heat-admin
+  tasks:
+  - name: copy the overcloudrc file to all nodes
+  - copy: src=/home/stack/overcloudrc dest=/home/heat-admin/overcloudrc owner=heat-admin group=heat-admin mode=0644
