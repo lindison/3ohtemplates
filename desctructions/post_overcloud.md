@@ -1,8 +1,27 @@
 # Post OverCloud install
 
+
+## Check CEPH  
+
+SSH to Ceph node  
+
+On the undercloud:  
+`nova list`
+
++--------------------------------------+-------------------------+--------+------------+-------------+--------------------+
+| ID                                   | Name                    | Status | Task State | Power State | Networks           |
++--------------------------------------+-------------------------+--------+------------+-------------+--------------------+
+| 56336574-d1d6-4e07-8c57-c4c502421e52 | overcloud-cephstorage-0 | ACTIVE | -          | Running     | ctlplane=10.0.0.14 |
+| df4828f2-2ebf-4103-8f0e-7bc539ce4dc2 | overcloud-cephstorage-1 | ACTIVE | -          | Running     | ctlplane=10.0.0.21 |
+| 800fcdb1-f763-4564-a5ed-73fad8df642e | overcloud-cephstorage-2 | ACTIVE | -          | Running     | ctlplane=10.0.0.15 |
+
 ## Create the OpenStack Tenant Networks   
 
-Either the overcloudnetwork.sh script can be run; or the below commands can be run.
+Either the overcloudnetwork.sh script can be run; or the below commands can be run to do the one offs.
+
+$ `./build_overcloud.sh`  
+
+This scipt will build the overcloud.  
 
 neutron net-create <name>  
 `neutron net-create default`
