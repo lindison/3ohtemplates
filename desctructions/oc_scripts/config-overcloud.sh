@@ -40,6 +40,7 @@ neutron router-interface-add dev_router utility
 
 echo "CONFIGING FLAVORS"
 
+openstack flavor create --public micro --id 00 --ram 128 --swap 128 --ephemeral 0 --disk 1 --vcpus 1
 openstack flavor create --public kilo-1-tiny --id 0 --ram 256 --swap 256 --ephemeral 1 --disk 1 --vcpus 1
 openstack flavor create --public kilo-1-20 --id 1 --ram 20480 --swap 256 --ephemeral 1 --disk 10 --vcpus 1
 openstack flavor create --public kilo-1-40 --id 2 --ram 40960 --swap 256 --ephemeral 1 --disk 10 --vcpus 1
@@ -51,4 +52,25 @@ openstack flavor create --public mega-4-32 --id 7 --ram 32768 --swap 256 --ephem
 openstack flavor create --public mega-8-32 --id 8 --ram 32768 --swap 256 --ephemeral 1 --disk 10 --vcpus 8
 openstack flavor create --public mega-8-64 --id 9 --ram 65536 --swap 256 --ephemeral 1 --disk 10 --vcpus 8
 
-echo "CONFIGING TENANT"
+echo "Update Project: ADMIN Quotas"
+
+nova quota-class-update --instances 100 default
+nova quota-class-update --cores 100 default
+
+echo "Defining Network Environmental Values"
+
+web_id=$(neutron net-list | awk '$4 == "web" {print $2}')
+app_id=$(neutron net-list | awk '$4 == "app" {print $2}')
+db_id=$(neutron net-list | awk '$4 == "db" {print $2}')
+dev_id=$(neutron net-list | awk '$4 == "dev" {print $2}')
+utility_id=$(neutron net-list | awk '$4 == "utility" {print $2}')
+
+echo "BUILD TEST INSTANCES"
+
+for i in {1..2}; do nova boot --flavor micro --nic net-id=$web_id --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key web$i; done
+for i in {1..1}; do nova boot --flavor micro --nic net-id=$app_id --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key app$i; done
+for i in {1..1}; do nova boot --flavor micro --nic net-id=$db_id --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key db$i; done
+for i in {2..8}; do nova boot --flavor micro --nic net-id=$dev_id --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key dev$i; done
+for i in {1..1}; do nova boot --flavor micro --nic net-id=$utility_id --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key calamari$i; done
+for i in {1..1}; do nova boot --flavor micro --nic net-id=$utility_id --image cirros-0.3.3-x86_64 -1security-group default --key-name demo-key logging$i; done
+for i in {1..1}; do nova boot --flavor micro --nic net-id=$utility_id --image cirros-0.3.3-x86_64 --security-group default --key-name demo-key goldstone$i; done
