@@ -12,8 +12,17 @@ ROSP 8 | OpenStack | Red Hat | yum
 Ansible | Ansible | Ansible | git
 Docker | Docker | Docker | pip
 
-
 ## Pre-flight checks
+
+UnderCloud  
+bond0 management  
+bond1 pxe untagged - No LACP?  
+
+Validate networking on OverCloud  
+
+OverCloud  
+bond0 tags all VLANs  
+bond1 pxe untagged  - No LACP?  
 
 Validate ability to log into system  
 Validate network connectivity to the UnderCloud node  
@@ -24,7 +33,7 @@ Validate the RH subscription
 Disable all Repos  
 Enable only the needed Repos  
 Validate the network configuration on the UnderCloud node  
-Validate the network configuration on the target nodes
+Validate the network configuration on the target nodes  
 Run yum update and reboot the system  
 
 ## Create the Stack user
@@ -71,6 +80,22 @@ Configure flavors and profiles
 Assign profiles to nodes  
 Configure YAML files  
 
+### Storage
+
+Cinder  
+
+XIO  
+Compute and Controller  
+
+SolidFire  
+Zone it to everything  
+Compute and Controller  
+
+CEPH  
+Compute and Controller  
+
+### Ansible Playbooks  
+
 ## Install OverCloud
 
 Update build_overcloud.sh  
@@ -85,11 +110,32 @@ Log into OverCloud using heat-admin account from UnderCloud
 Log into the OverCloud CEPH node using the head-admin  
 Test the CEPH node (ceph health)  
 
+## Check Cinder backends
+
+Source the overcloudrc credentials  
+Check the Cinder backends in the /etc/cinder/cinder.conf  
+Check the output of the cinder  
+Check the quotas  
+
 ## Install test glance image cirros  
 
 Download the image and register the image with glance  
 
+## Check MYSQL DB
+
+From controller01, sudo mysql  
+Show databases  
+Use glance    
+Run a basic query to check uuid of glance images  
+
+From controller02, sudo mysql  
+Show databases; use glance
+Run a query to check uuid of glance images  
+
+This should confirm mysql replication   
+
 ## configure overcloud and run test  
 
 Update the config-overcloud.sh script  
+In presentation window, open Horizon dashboard and open Network Topology  
 Run the config-overcloud.sh script  
