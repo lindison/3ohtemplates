@@ -1,4 +1,3 @@
 # Nagios
 
-
-## Nagios 
+## Nagios
